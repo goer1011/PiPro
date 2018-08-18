@@ -42,18 +42,17 @@ def ImageDrawer(name = 'Müller',there = 'ist nicht da'):
     EPD_HEIGHT      = 264
     # Create a white mask 
     mask = Image.new('1', (EPD_HEIGHT,EPD_WIDTH), 255)   
-    #Create font
-    font1 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoFLF-Bold.tff', 20)
-    font2 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoFLF.tff', 25)
-    font3 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF.tff', 30)
-    font4 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF-Bold.tff', 35)
+    #Create font and test it
+    font = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoFLF-Bold.tff', 20)
+    draw.text((10,10), 'Prof. {} {} '.format(name, there),font = font, fill = 0)
+    font = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoFLF.tff', 25)
+    draw.text((20,10), 'Prof. {} {} '.format(name, there),font = font, fill = 0)
+    font = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF.tff', 30)
+    draw.text((30,10), 'Prof. {} {} '.format(name, there),font = font, fill = 0)
+    font = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF-Bold.tff', 35)
+    draw.text((40,10), 'Prof. {} {} '.format(name, there),font = font, fill = 0)
     #Create a Draw object than allows to add elements (line, text, circle...) 
     draw = ImageDraw.Draw(mask)
-    #Some Text
-    draw.text((10,10), 'Prof. {} {} '.format(name, there),font = font1, fill = 0)
-    draw.text((20,10), 'Prof. {} {} '.format(name, there),font = font2, fill = 0)
-    draw.text((30,10), 'Prof. {} {} '.format(name, there),font = font3, fill = 0)
-    draw.text((40,10), 'Prof. {} {} '.format(name, there),font = font4, fill = 0)
     #Save the picture on disk ( now create a new Image with vertikal orientation)
     neu = Image.new('1',(EPD_WIDTH, EPD_HEIGHT),255)
     #rotate the image in mask created 90 degree
