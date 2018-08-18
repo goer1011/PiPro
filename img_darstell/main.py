@@ -50,7 +50,7 @@ def ImageDrawer(name = 'Müller',there = 'ist nicht da'):
     #Create a Draw object than allows to add elements (line, text, circle...) 
     draw = ImageDraw.Draw(mask)
     #Some Text
-    draw.text(10,10), 'Prof. {} {} '.format(name, there),font1 = font1, fill = 0)
+    draw.text(10,10), 'Prof. {} {} '.format(name, there),font = font1, fill = 0)
     draw.text(20,10), 'Prof. {} {} '.format(name, there),font = font2, fill = 0)
     draw.text(30,10), 'Prof. {} {} '.format(name, there),font = font3, fill = 0)
     draw.text(40,10), 'Prof. {} {} '.format(name, there),font = font4, fill = 0)
