@@ -43,10 +43,10 @@ def ImageDrawer(name = 'Müller',there = 'ist nicht da'):
     # Create a white mask 
     mask = Image.new('1', (EPD_HEIGHT,EPD_WIDTH), 255)   
     #Create font
-    font1 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoFLF-Bold', 20)
-    font2 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoFLF', 25)
-    font3 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF', 30)
-    font4 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF-Bold', 35)
+    font1 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoFLF-Bold.tff', 20)
+    font2 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoFLF.tff', 25)
+    font3 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF.tff', 30)
+    font4 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF-Bold.tff', 35)
     #Create a Draw object than allows to add elements (line, text, circle...) 
     draw = ImageDraw.Draw(mask)
     #Some Text
