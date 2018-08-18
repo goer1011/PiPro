@@ -43,11 +43,17 @@ def ImageDrawer(name = 'Müller',there = 'ist nicht da'):
     # Create a white mask 
     mask = Image.new('1', (EPD_HEIGHT,EPD_WIDTH), 255)   
     #Create font
-    font = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/BEBAS.ttf', 15)
+    font1 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoFLF-Bold', 20)
+    font1 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoFLF', 25)
+    font1 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF', 30)
+    font1 = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF-Bold', 35)
     #Create a Draw object than allows to add elements (line, text, circle...) 
     draw = ImageDraw.Draw(mask)
     #Some Text
-    draw.text((EPD_HEIGHT/4,EPD_WIDTH/2), 'Prof. {} {} '.format(name, there),font = font, fill = 0)
+    draw.text(10,10), 'Prof. {} {} '.format(name, there),font1 = font1, fill = 0)
+    draw.text(20,10), 'Prof. {} {} '.format(name, there),font = font2, fill = 0)
+    draw.text(30,10), 'Prof. {} {} '.format(name, there),font = font3, fill = 0)
+    draw.text(40,10), 'Prof. {} {} '.format(name, there),font = font4, fill = 0)
     #Save the picture on disk ( now create a new Image with vertikal orientation)
     neu = Image.new('1',(EPD_WIDTH, EPD_HEIGHT),255)
     #rotate the image in mask created 90 degree
