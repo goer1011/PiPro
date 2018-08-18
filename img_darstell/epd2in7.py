@@ -244,7 +244,7 @@ class EPD:
             self.send_data(self.lut_wb[count])
 
     def get_frame_buffer(self, image):
-        buf = [0x00] * (self.width * self.height / 8)
+        buf = [0x00] * (self.width * self.height // 8)
         # Set buffer to value of Python Imaging Library image.
         # Image must be in mode 1.
         image_monocolor = image.convert('1')
