@@ -45,9 +45,8 @@ def ImageDrawer(name = 'Müller',there = 'ist nicht da'):
     #Create a Draw object than allows to add elements (line, text, circle...) 
     draw = ImageDraw.Draw(mask) 
     #Create font and test it
-    font = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoFLF-Bold.ttf', 20)
-    font = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF-Bold.ttf', 30)
-    draw.text((10,10), 'Prof. {} {} '.format(name, there),font = font, fill = 0)
+    font = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF-Bold.ttf', 25)
+    draw.text((0,0), 'Prof. {} {} '.format(name, there),font = font, fill = 0)
     #Save the picture on disk ( now create a new Image with vertikal orientation)
     neu = Image.new('1',(EPD_WIDTH, EPD_HEIGHT),255)
     #rotate the image in mask created 90 degree
