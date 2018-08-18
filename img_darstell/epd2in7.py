@@ -28,7 +28,7 @@ import epdif
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 # Display resolution
 EPD_WIDTH       = 176

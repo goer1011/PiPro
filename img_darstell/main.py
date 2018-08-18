@@ -34,7 +34,7 @@ def main():
     epd.init()
     ImageDrawer('Ali')
     # display images from Image
-    epd.display_frame(epd.get_frame_buffer(Image.open('monocolor.bmp')))
+    epd.display_frame(epd.get_frame_buffer(Image.open('IsThere.bmp')))
 
 def ImageDrawer(name = 'Müller',there = 'ist nicht da'):
     #Image Size ( it is horizontal )
@@ -42,16 +42,17 @@ def ImageDrawer(name = 'Müller',there = 'ist nicht da'):
     EPD_HEIGHT      = 264
     # Create a white mask 
     mask = Image.new('1', (EPD_HEIGHT,EPD_WIDTH), 255)   
+    #Create font
+    font = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/BEBAS.ttf', 15)
     #Create a Draw object than allows to add elements (line, text, circle...) 
     draw = ImageDraw.Draw(mask)
     #Some Text
-    draw.text((EPD_HEIGHT/4,EPD_WIDTH/2), 'Prof. {} {} '.format(name, there), fill = 0)
+    draw.text((EPD_HEIGHT/4,EPD_WIDTH/2), 'Prof. {} {} '.format(name, there),font = font fill = 0)
     #Save the picture on disk ( now create a new Image with vertikal orientation)
     neu = Image.new('1',(EPD_WIDTH, EPD_HEIGHT),255)
     #rotate the image in mask created 90 degree
     neu = mask.transpose(Image.ROTATE_90)
-    neu.show()
     neu.save('IsThere.bmp',"bmp")
-    
+
 if __name__ == '__main__':
     main()

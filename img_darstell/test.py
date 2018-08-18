@@ -1,8 +1,8 @@
 #Import libraries
 from PIL import Image
 from PIL import ImageDraw
-def ImageDrawer(name = 'Müller',there = 'nicht da'):
-    #Image Size
+def ImageDrawer(name = 'Müller',there = 'ist nicht da'):
+    #Image Size ( it is horizontal )
     EPD_WIDTH       = 176
     EPD_HEIGHT      = 264
     # Create a white mask 
@@ -11,10 +11,9 @@ def ImageDrawer(name = 'Müller',there = 'nicht da'):
     draw = ImageDraw.Draw(mask)
     #Some Text
     draw.text((EPD_HEIGHT/4,EPD_WIDTH/2), 'Prof. {} {} '.format(name, there), fill = 0)
-    #Horizontal line
-    draw.line((0,EPD_WIDTH/2 + 12, EPD_HEIGHT, EPD_WIDTH/2 + 12), fill = 0)
-    #Save the picture on disk
+    #Save the picture on disk ( now create a new Image with vertikal orientation)
     neu = Image.new('1',(EPD_WIDTH, EPD_HEIGHT),255)
+    #rotate the image in mask created 90 degree
     neu = mask.transpose(Image.ROTATE_90)
     neu.show()
     neu.save('IsThere.bmp',"bmp")
