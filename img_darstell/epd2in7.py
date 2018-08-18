@@ -1,9 +1,9 @@
 ##
  #  @filename   :   epd2in7.py
  #  @brief      :   Implements for e-paper library
- #  @author     :   Yehui from Waveshare
+ #  @author     :   Erfan Golchini
  #
- #  Copyright (C) Waveshare     July 31 2017
+ #  Copyright (C) Erfan Golchini     July 31 2017
  #
  # Permission is hereby granted, free of charge, to any person obtaining a copy
  # of this software and associated documnetation files (the "Software"), to deal
@@ -258,19 +258,19 @@ class EPD:
             for x in range(self.width):
                 # Set the bits for the column of pixels at the current position.
                 if pixels[x, y] != 0:
-                    buf[(x + y * self.width) / 8] |= (0x80 >> (x % 8))
+                    buf[(x + y * self.width) // 8] |= (0x80 >> (x % 8))
         return buf
 
     def display_frame(self, frame_buffer):
         if (frame_buffer != None):
             self.send_command(DATA_START_TRANSMISSION_1)           
             self.delay_ms(2)
-            for i in range(0, self.width * self.height / 8):
+            for i in range(0, self.width * self.height // 8):
                 self.send_data(0xFF)  
             self.delay_ms(2)                  
             self.send_command(DATA_START_TRANSMISSION_2)
             self.delay_ms(2)
-            for i in range(0, self.width * self.height / 8):
+            for i in range(0, self.width * self.height // 8):
                 self.send_data(frame_buffer[i])  
             self.delay_ms(2)        
             self.send_command(DISPLAY_REFRESH) 

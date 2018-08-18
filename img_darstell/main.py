@@ -32,18 +32,26 @@ from PIL import ImageDraw
 def main():
     epd = epd2in7.EPD()
     epd.init()
-    n= 'Müller'
-    # For simplicity, the arguments are explicit numerical coordinates
-    image = Image.new('1', (epd2in7.EPD_WIDTH, epd2in7.EPD_HEIGHT), 255)    # 255: clear the image with white
-    draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype('/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf', 18)
-    draw.text((20, 50), 'Prof {}'.format(n), font = font, fill = 0)
-    # draw.text((18, 80), 'Hello world!', font = font, fill = 255)
+    ImageDrawer('Ali')
+    # display images from Image
+    epd.display_frame(epd.get_frame_buffer(Image.open('monocolor.bmp')))
 
-    epd.display_frame(epd.get_frame_buffer(image))
-
-    # display images
-    # epd.display_frame(epd.get_frame_buffer(Image.open('monocolor.bmp')))
-
+def ImageDrawer(name = 'Müller',there = 'ist nicht da'):
+    #Image Size ( it is horizontal )
+    EPD_WIDTH       = 176
+    EPD_HEIGHT      = 264
+    # Create a white mask 
+    mask = Image.new('1', (EPD_HEIGHT,EPD_WIDTH), 255)   
+    #Create a Draw object than allows to add elements (line, text, circle...) 
+    draw = ImageDraw.Draw(mask)
+    #Some Text
+    draw.text((EPD_HEIGHT/4,EPD_WIDTH/2), 'Prof. {} {} '.format(name, there), fill = 0)
+    #Save the picture on disk ( now create a new Image with vertikal orientation)
+    neu = Image.new('1',(EPD_WIDTH, EPD_HEIGHT),255)
+    #rotate the image in mask created 90 degree
+    neu = mask.transpose(Image.ROTATE_90)
+    neu.show()
+    neu.save('IsThere.bmp',"bmp")
+    
 if __name__ == '__main__':
     main()

@@ -1,8 +1,8 @@
 ##
  #  @filename   :   imagedata.py
- #  @brief      :   data file for epd demo
+ #  @brief      :   data file for PiPro
  #
- #  Copyright (C) Waveshare     July 4 2017
+ #  Copyright (C) Erfan Golchini     July 4 2017
  #
  # Permission is hereby granted, free of charge, to any person obtaining a copy
  # of this software and associated documnetation files (the "Software"), to deal

@@ -1,9 +1,9 @@
 ##
  #  @filename   :   epdif.py
  #  @brief      :   EPD hardware interface implements (GPIO, SPI)
- #  @author     :   Yehui from Waveshare
+ #  @author     :   Erfan Golchini
  #
- #  Copyright (C) Waveshare     July 4 2017
+ #  Copyright (C) Erfan Golchini     July 4 2017
  #
  # Permission is hereby granted, free of charge, to any person obtaining a copy
  # of this software and associated documnetation files (the "Software"), to deal
@@ -29,14 +29,14 @@ import RPi.GPIO as GPIO
 import time
 
 # Pin definition
-RST_PIN         = 17
-DC_PIN          = 25
-CS_PIN          = 8
-BUSY_PIN        = 24
+RST_PIN        = 17
+DC_PIN         = 25
+CS_PIN         = 8
+BUSY_PIN       = 24
 
 # Display resolution
-EPD_WIDTH       = 176
-EPD_HEIGHT      = 264
+EPD_WIDTH      = 176
+EPD_HEIGHT     = 264
 
 # SPI device, bus = 0, device = 0
 SPI = spidev.SpiDev(0, 0)
