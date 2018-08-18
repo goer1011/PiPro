@@ -48,11 +48,11 @@ def ImageDrawer(name = 'Müller',there = 'ist nicht da'):
     font = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoFLF-Bold.ttf', 20)
     draw.text((10,10), 'Prof. {} {} '.format(name, there),font = font, fill = 0)
     font = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoFLF.ttf', 25)
-    draw.text((10,25), 'Prof. {} {} '.format(name, there),font = font, fill = 0)
+    draw.text((10,30), 'Prof. {} {} '.format(name, there),font = font, fill = 0)
     font = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF.ttf', 30)
     draw.text((10,50), 'Prof. {} {} '.format(name, there),font = font, fill = 0)
     font = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF-Bold.ttf', 35)
-    draw.text((40,10), 'Prof. {} {} '.format(name, there),font = font, fill = 0)
+    draw.text((10,70), 'Prof. {} {} '.format(name, there),font = font, fill = 0)
     #Save the picture on disk ( now create a new Image with vertikal orientation)
     neu = Image.new('1',(EPD_WIDTH, EPD_HEIGHT),255)
     #rotate the image in mask created 90 degree
