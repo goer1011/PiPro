@@ -32,11 +32,11 @@ from PIL import ImageDraw
 def main():
     epd = epd2in7.EPD()
     epd.init()
-    ImageDrawer('Zimmermann')
+    bildZeichner('Zimmermann')
     # display images from Image
     epd.display_frame(epd.get_frame_buffer(Image.open('IsThere.bmp')))
 
-def ImageDrawer(name = 'Müller',there = 'ist nicht da'):
+def bildZeichner(name = 'Müller', raum = 'ist nicht da'):
     #Image Size ( it is horizontal )
     EPD_WIDTH       = 176
     EPD_HEIGHT      = 264

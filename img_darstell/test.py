@@ -1,22 +1,71 @@
-#Import libraries
-from PIL import Image
-from PIL import ImageDraw
-def ImageDrawer(name = 'Müller',there = 'ist nicht da'):
-    #Image Size ( it is horizontal )
-    EPD_WIDTH       = 176
-    EPD_HEIGHT      = 264
-    # Create a white mask 
-    mask = Image.new('1', (EPD_HEIGHT,EPD_WIDTH), 255)   
-    #Create a Draw object than allows to add elements (line, text, circle...) 
-    draw = ImageDraw.Draw(mask)
-    #Some Text
-    draw.text((EPD_HEIGHT/4,EPD_WIDTH/2), 'Prof. {} {} '.format(name, there), fill = 0)
-    #Save the picture on disk ( now create a new Image with vertikal orientation)
-    neu = Image.new('1',(EPD_WIDTH, EPD_HEIGHT),255)
-    #rotate the image in mask created 90 degree
-    neu = mask.transpose(Image.ROTATE_90)
-    neu.show()
-    neu.save('IsThere.bmp',"bmp")
+from icalendar import Calendar
+from datetime import datetime
+import time
+import datetime
 
-if __name__=='__main__':
-    ImageDrawer()
+
+class Termin:
+
+    def __init__(self, datum, raum, name):
+        self.name = name
+        self.datum = datum
+        self.raum = raum
+
+# sucht aus einem String den Namen des Profs raus. Dabei wird der Name der nach "Dozent:"" kommt. Also "Mustermann" bei "Dozent: Mustermann, Max ".
+def namensSuche(satz):
+
+    if not satz:
+        raise ValueError("dein String ist leer")
+    
+    wortListe = satz.split(" ")
+    name = ""
+
+    for zl in range(len(wortListe)):
+        try:
+            if wortListe[zl].upper() == "DOZENT:":
+                name = wortListe[zl+1].strip(",")
+        except:
+            print("Kein Dozent gefunden! der String scheint nach Dozent leer zu sein!")
+    if (name == ("" or "Raum:")):
+        print("Es wurde kein Name gefunden")
+
+    return name
+
+# sucht aus einem String den Raum raus in dem der Prof sich befinden soll. Dafür soll die Konvention mit Raum: genutzt werden wie bei namensSuche()
+def raumSuche(satz):
+
+    if not satz:
+        raise ValueError("dein String ist leer")
+    
+    wortListe = satz.split(" ")
+    raum = ""
+
+    for zl in range(len(wortListe)):
+        try:
+            if(wortListe[zl].upper() == "RAUM:"):
+                raum = wortListe[zl+1]
+        except:
+            print("Kein Raum gefunden checke den String, nach RAUM: kommt nichts !")
+    if not raum:
+        print("Kein Raum gefunden !!")
+    
+    return raum
+
+def aktualisieren(pfad ="kalender/hskalender.ics"):
+try:
+    datei = open(pfad,"rb")
+except:
+    print("Beim öffnen des Pfads ist etwas schiefgegangen, richtiger Pfad eingegeben ?")
+kalender = Calendar.from_ical(datei.read())
+for component in cal.walk():
+    if component.name == "VEVENT":
+        beschreibung = component.get("description")
+        name = namensSuche(beschreibung)
+        raum = raumSuche(beschreibung)
+        beginn = component.get("dtstart").dt
+        ende = component.get("dtend").dt
+         
+fname.close()
+
+
+
