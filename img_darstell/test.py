@@ -3,12 +3,14 @@ from datetime import datetime
 import time
 import datetime
 
+termin = []
 
 class Termin:
 
-    def __init__(self, datum, raum, name):
+    def __init__(self, strtdatum, enddatum, raum, name):
         self.name = name
-        self.datum = datum
+        self.strtdatum = strtdatum
+        self.enddatum = enddatum
         self.raum = raum
 
 # sucht aus einem String den Namen des Profs raus. Dabei wird der Name der nach "Dozent:"" kommt. Also "Mustermann" bei "Dozent: Mustermann, Max ".
@@ -52,20 +54,33 @@ def raumSuche(satz):
     return raum
 
 def aktualisieren(pfad ="kalender/hskalender.ics"):
-try:
-    datei = open(pfad,"rb")
-except:
-    print("Beim öffnen des Pfads ist etwas schiefgegangen, richtiger Pfad eingegeben ?")
-kalender = Calendar.from_ical(datei.read())
-for component in cal.walk():
-    if component.name == "VEVENT":
-        beschreibung = component.get("description")
-        name = namensSuche(beschreibung)
-        raum = raumSuche(beschreibung)
-        beginn = component.get("dtstart").dt
-        ende = component.get("dtend").dt
-         
-fname.close()
+    datei = ""
+    try:
+        datei = open(pfad,"rb")
+    except:
+        print("Beim öffnen des Pfads ist etwas schiefgegangen, richtiger Pfad eingegeben ?")
+    kalender = Calendar.from_ical(datei.read())
+    for component in kalender.walk():
+        if component.name == "VEVENT":
+            beschreibung = component.get("description")
+            name = namensSuche(beschreibung)
+            raum = raumSuche(beschreibung)
+            beginn = component.get("dtstart").dt
+            ende = component.get("dtend").dt
+            eintrag = Termin(beginn, ende, raum, name)
+            termin.append(eintrag)
+
+            
+    if  datei:
+        datei.close()
+        print("fertig")
+
+aktualisieren()
+# for eintrag in termin:
+#     print(eintrag.strtdatum)
+termin = sorted(termin, key=lambda x: x.strtdatum)
+for eintrag in termin:
+    print(eintrag.strtdatum)
 
 
 
