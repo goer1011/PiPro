@@ -39,11 +39,11 @@ def main():
     # Hier wird das Bild erzeugt
     bildZeichner('O',raum="202")
     # Stellt das Bild dar
-    # epd.display_frame(epd.get_frame_buffer(Image.open('nachricht.bmp')))
+    epd.display_frame(epd.get_frame_buffer(Image.open('nachricht.bmp')))
 
 def bildZeichner(name = 'Müller', anwesenheit = 'ist nicht da', raum ="", vorlage = "vorlagen/nachricht_vorlage.bmp",fontpfad = 'font/VertigoPlusFLF-Bold.ttf'):
-     epd = epd2in7.EPD()
-     epd.init()
+    epd = epd2in7.EPD()
+    epd.init()
     if raum:
         raum = "ist im Raum: {}".format(raum)
     # Lädt die vorlage (Hinweis : sie muss horizontal 264px breit und 176px hoch sein)
@@ -61,7 +61,7 @@ def bildZeichner(name = 'Müller', anwesenheit = 'ist nicht da', raum ="", vorla
     #rotate the image in mask created 90 degree
     neu = mask.transpose(Image.ROTATE_90)
     neu.save('nachricht.bmp',"bmp")
-    neu.show()
+    
 
 # gibt die Schriftgröße(x)/den Zeilenabstand(y) zurück der gewählt werden soll damit der Text lesbar ist.
 def großBestimm(name, fontpfad ="font/VertigoPlusFLF-Bold.ttf", schreib = ImageDraw.Draw(Image.open("vorlagen/nachricht_vorlage.bmp"))):
