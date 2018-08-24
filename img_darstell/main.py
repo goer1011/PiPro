@@ -23,7 +23,8 @@
  # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  # THE SOFTWARE.
  ##
-
+import epd2in7
+import epdif
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
