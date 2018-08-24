@@ -24,7 +24,6 @@
  # THE SOFTWARE.
  ##
 
-import epd2in7
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
@@ -34,32 +33,54 @@ import time
 import datetime
 
 
-def main():
-    epd = epd2in7.EPD()
-    epd.init()
-    # Hier wird das Bild erzeugt
-    bildZeichner('Zimmermann')
-    # Stellt das Bild dar
-    epd.display_frame(epd.get_frame_buffer(Image.open('IstDa.bmp')))
 
-def bildZeichner(name = 'Müller', raum = 'ist nicht da'):
-    #Image Size ( it is horizontal )
-    EPD_WIDTH       = 176
-    EPD_HEIGHT      = 264
-    # Create a white mask 
-    mask = Image.open("IstDa.bmp")  
-    #Create a Draw object than allows to add elements (line, text, circle...) 
-    draw = ImageDraw.Draw(mask) 
-    #Create font and test it
-    font = ImageFont.truetype('/home/pi/PiPro/img_darstell/font/VertigoPlusFLF-Bold.ttf', 25)
-    draw.text((0,0), 'Prof. {} {} '.format(name, raum),font = font, fill = 0)
+def main():
+    termin = aktualisieren()
+    # Hier wird das Bild erzeugt
+    bildZeichner('O',raum="202")
+    # Stellt das Bild dar
+    # epd.display_frame(epd.get_frame_buffer(Image.open('nachricht.bmp')))
+
+def bildZeichner(name = 'Müller', anwesenheit = 'ist nicht da', raum ="", vorlage = "vorlagen/nachricht_vorlage.bmp",fontpfad = 'font/VertigoPlusFLF-Bold.ttf'):
+     epd = epd2in7.EPD()
+     epd.init()
+    if raum:
+        raum = "ist im Raum: {}".format(raum)
+    # Lädt die vorlage (Hinweis : sie muss horizontal 264px breit und 176px hoch sein)
+    mask = Image.open(vorlage)  
+    #Erstellt ein Draw Objekt mit dem man dann aus mask rumschreiben kann. 
+    schreib = ImageDraw.Draw(mask)
+    größen = großBestimm('Prof. {}:'.format(name), fontpfad, schreib) 
+    #Schrift wird ausgesucht inkl. schriftgröße
+    font = ImageFont.truetype(fontpfad, größen[0])
+    schreib.text((2,10), 'Prof. {}:'.format(name),font = font, fill = 0)
+    font = ImageFont.truetype(fontpfad, 45)
+    schreib.multiline_text((2,größen[1]), '{}!\n{}'.format(anwesenheit, raum ),font = font, fill = 0)
     #Save the picture on disk ( now create a new Image with vertikal orientation)
-    neu = Image.new('1',(EPD_WIDTH, EPD_HEIGHT),255)
+    neu = Image.new('1',(176, 264),255)
     #rotate the image in mask created 90 degree
     neu = mask.transpose(Image.ROTATE_90)
-    neu.save('IstDa.bmp',"bmp")
+    neu.save('nachricht.bmp',"bmp")
+    neu.show()
 
-termin = []
+# gibt die Schriftgröße(x)/den Zeilenabstand(y) zurück der gewählt werden soll damit der Text lesbar ist.
+def großBestimm(name, fontpfad ="font/VertigoPlusFLF-Bold.ttf", schreib = ImageDraw.Draw(Image.open("vorlagen/nachricht_vorlage.bmp"))):
+    if not name:
+        raise ValueError("leerer Name")
+
+    schriftgröße =1
+    font = ImageFont.truetype(fontpfad,schriftgröße)
+    xy = schreib.textsize(name ,font = font)
+
+    while ((xy[0]<= 195) and (xy[1]<=50)):
+        schriftgröße = 1 + schriftgröße
+        font = ImageFont.truetype(fontpfad,schriftgröße)
+        xy = schreib.textsize(name ,font = font)
+
+    ergebnis = [ schriftgröße, xy[1]+10 ]
+
+    return ergebnis
+   
 
 class Termin:
 
@@ -110,26 +131,31 @@ def raumSuche(satz):
     return raum
 
 def aktualisieren(pfad ="kalender/hskalender.ics"):
+    
     datei = ""
     try:
         datei = open(pfad,"rb")
     except:
         print("Beim öffnen des Pfads ist etwas schiefgegangen, richtiger Pfad eingegeben ?")
     kalender = Calendar.from_ical(datei.read())
+    termin = []
     for component in kalender.walk():
         if component.name == "VEVENT":
-            beschreibung = component.get("description")
-            name = namensSuche(beschreibung)
-            raum = raumSuche(beschreibung)
-            beginn = component.get("dtstart").dt
-            ende = component.get("dtend").dt
-            eintrag = Termin(beginn, ende, raum, name)
-            termin.append(eintrag)
+            if (component.get("categories").upper()==("NORMAL" or "AKTUELL" or "")):
+                beschreibung = component.get("description")
+                name = namensSuche(beschreibung)
+                #print(name)
+                raum = raumSuche(beschreibung)
+                beginn = component.get("dtstart").dt
+                ende = component.get("dtend").dt
+                eintrag = Termin(beginn, ende, raum, name)
+                termin.append(eintrag)
     termin = sorted(termin, key=lambda x: x.strtdatum)
            
     if  datei:
         datei.close()
-        print("fertig")
+
+    return termin
 
 if __name__ == '__main__':
     main()
