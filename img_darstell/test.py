@@ -10,7 +10,9 @@ import datetime
 
 def main():
     termin = aktualisieren()
-    # Hier wird das Bild erzeugt
+    heute = datetime.datetime.now
+    print (heute)
+
     bildZeichner('O',raum="202")
     # Stellt das Bild dar
     # epd.display_frame(epd.get_frame_buffer(Image.open('nachricht.bmp')))
