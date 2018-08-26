@@ -23,8 +23,8 @@
  # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  # THE SOFTWARE.
  ##
-# import epd2in7
-# import epdif
+import epd2in7
+import epdif
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
@@ -86,8 +86,8 @@ def heuteBestimmen(datum):
     return heute
 
 def bildZeichner(name = 'Müller', anwesenheit = 'ist nicht da', raum ="", vorlage = "vorlagen/nachricht_vorlage.bmp",fontpfad = 'font/VertigoPlusFLF-Bold.ttf'):
-    # epd = epd2in7.EPD()
-    # epd.init()
+     epd = epd2in7.EPD()
+    epd.init()
     if raum:
         raum = "ist im Raum: {}".format(raum)
     # Lädt die vorlage (Hinweis : sie muss horizontal 264px breit und 176px hoch sein)
@@ -106,7 +106,7 @@ def bildZeichner(name = 'Müller', anwesenheit = 'ist nicht da', raum ="", vorla
     neu = mask.transpose(Image.ROTATE_90)
     neu.save('nachricht.bmp',"bmp")
     # Stellt das Bild dar
-    # epd.display_frame(epd.get_frame_buffer(Image.open('nachricht.bmp')))
+     epd.display_frame(epd.get_frame_buffer(Image.open('nachricht.bmp')))
     
 
 # gibt die Schriftgröße(x)/den Zeilenabstand(y) zurück der gewählt werden soll damit der Text lesbar ist.
