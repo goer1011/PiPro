@@ -45,7 +45,7 @@ def main():
     heute = heuteBestimmen(termin[0].strtdatum)
     testtermin = termin[0]
     if (testtermin.enddatum > heute):
-        bildZeichner(name = prof.name,raum= prof.raum)
+        bildZeichner(name = prof.name,raum = testtermin.raum, büro = prof.raum)
 
 def profLaden(pfad = "config.txt",arg1="nachname",arg2="raumnummer"):
     datei = ""
@@ -60,15 +60,15 @@ def profLaden(pfad = "config.txt",arg1="nachname",arg2="raumnummer"):
         while(zeile):
             if zeile[0] != "#":
                 print(zeile)
-                zeile.split("=")
-                if(zeile[0]==arg1):
+                anfor = zeile.split("=")
+                if(anfor[0]==arg1):
                     try:
-                        name = zeile[1]
+                        name = anfor[1]
                     except:
                         name = "unbenannt"
-                elif(zeile[0]==arg2):
+                elif(anfor[0]==arg2):
                     try:
-                        raum = zeile[1]
+                        raum = anfor[1]
                     except:
                         raum = "unbkt"
             zeile = datei.readline()
@@ -85,11 +85,13 @@ def heuteBestimmen(datum):
         heute = datetime.datetime.now(timezone.utc)
     return heute
 
-def bildZeichner(name = 'Müller', anwesenheit = 'ist nicht da', raum ="", vorlage = "vorlagen/nachricht_vorlage.bmp",fontpfad = 'font/VertigoPlusFLF-Bold.ttf'):
-     epd = epd2in7.EPD()
+def bildZeichner(name = "unbekannt", anwesenheit = "ist nicht da", raum ="", vorlage = "vorlagen/nachricht_vorlage.bmp",fontpfad = "font/VertigoPlusFLF-Bold.ttf", büro = "unbkt"):
+    epd = epd2in7.EPD()
     epd.init()
     if raum:
         raum = "ist im Raum: {}".format(raum)
+        if raum == büro:
+            anwesenheit = "ist da"
     # Lädt die vorlage (Hinweis : sie muss horizontal 264px breit und 176px hoch sein)
     mask = Image.open(vorlage)  
     #Erstellt ein Draw Objekt mit dem man dann aus mask rumschreiben kann. 
@@ -106,7 +108,7 @@ def bildZeichner(name = 'Müller', anwesenheit = 'ist nicht da', raum ="", vorla
     neu = mask.transpose(Image.ROTATE_90)
     neu.save('nachricht.bmp',"bmp")
     # Stellt das Bild dar
-     epd.display_frame(epd.get_frame_buffer(Image.open('nachricht.bmp')))
+    epd.display_frame(epd.get_frame_buffer(Image.open('nachricht.bmp')))
     
 
 # gibt die Schriftgröße(x)/den Zeilenabstand(y) zurück der gewählt werden soll damit der Text lesbar ist.
