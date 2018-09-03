@@ -40,73 +40,101 @@ def main():
     prof = profLaden()
     termin = aktualisieren()
     print(len(termin), " Termine geladen")
+
     if(len(termin)==0):
         raise ValueError("Keine termine zum Laden")
-    heute = heuteBestimmen(termin[0].strtdatum)
-    testtermin = termin[0]
-    if (testtermin.enddatum > heute):
-        bildZeichner(name = prof.name,raum = testtermin.raum, büro = prof.raum)
 
+    heute = heuteBestimmen(termin[0].strtdatum)
+
+    if (termin[0].enddatum > heute and termin[0].strtdatum < heute):
+        bildZeichner(name = prof.name,raum = termin.raum, büro = prof.raum)
+    else:
+        bildZeichner(name = prof.name, büro = prof.raum)
+
+#aus der Config datei wird der name und die raumnummer ausgelesen
 def profLaden(pfad = "config.txt",arg1="nachname",arg2="raumnummer"):
     datei = ""
     name = ""
     raum = ""
+
     try:
         datei = open(pfad,"r")
     except:
         print("datei konnte nicht gelesen werden")
+    
     if datei:
         zeile = datei.readline()
+
         while(zeile):
+            
             if zeile[0] != "#":
-                print(zeile)
                 anfor = zeile.split("=")
+
                 if(anfor[0]==arg1):
+
                     try:
-                        name = anfor[1]
+                        name = anfor[1].strip()
                     except:
+                        print("Es konnte kein name aus der Config datei gelesen wwerden")
                         name = "unbenannt"
+
                 elif(anfor[0]==arg2):
+
                     try:
-                        raum = anfor[1]
+                        raum = anfor[1].strip()
                     except:
+                        print("Es konnte kein Raum aus der Config datei gelesen werden")
                         raum = "unbkt"
+
             zeile = datei.readline()
+
     prof = Prof(name,raum)
+
+    if datei:
+        datei.close()
+
     return prof
 
-
+# Es wird bestimmt ob UTC genutzt wird oder Ortsübliche Zeit. Ansonsten gibt es Inkompabilität
 def heuteBestimmen(datum):
     try:
         heute = datetime.datetime.now()
         print (heute - datum)
-       
     except:
         heute = datetime.datetime.now(timezone.utc)
+
     return heute
 
 def bildZeichner(name = "unbekannt", anwesenheit = "ist nicht da", raum ="", vorlage = "vorlagen/nachricht_vorlage.bmp",fontpfad = "font/VertigoPlusFLF-Bold.ttf", büro = "unbkt"):
     epd = epd2in7.EPD()
     epd.init()
-    if raum:
+
+    if raum == büro:
+        raum = ""
+        anwesenheit = "ist da"
+
+    elif raum:
+        print("yes")
         raum = "ist im Raum: {}".format(raum)
-        if raum == büro:
-            anwesenheit = "ist da"
+
     # Lädt die vorlage (Hinweis : sie muss horizontal 264px breit und 176px hoch sein)
     mask = Image.open(vorlage)  
     #Erstellt ein Draw Objekt mit dem man dann aus mask rumschreiben kann. 
     schreib = ImageDraw.Draw(mask)
-    größen = großBestimm('Prof. {}:'.format(name), fontpfad, schreib) 
+    größen = großBestimm('Prof. {}:'.format(name), fontpfad, schreib)
+
     #Schrift wird ausgesucht inkl. schriftgröße
     font = ImageFont.truetype(fontpfad, größen[0])
     schreib.text((10,10), 'Prof. {}:'.format(name),font = font, fill = 0)
     font = ImageFont.truetype(fontpfad, 45)
     schreib.multiline_text((10,größen[1]), '{}!\n{}'.format(anwesenheit, raum ),font = font, fill = 0)
+
     # Erstellt ein neues Bild aber mit umgekehrten Größen
     neu = Image.new('1',(176, 264),255)
     # Die horizontale Maske wird nun um 90 Grad gedreht und auf das neue Bild geschrieben 
     neu = mask.transpose(Image.ROTATE_90)
     neu.save('nachricht.bmp',"bmp")
+    neu.show()
     # Stellt das Bild dar
     epd.display_frame(epd.get_frame_buffer(Image.open('nachricht.bmp')))
     
@@ -120,7 +148,7 @@ def großBestimm(name, fontpfad ="font/VertigoPlusFLF-Bold.ttf", schreib = Image
     font = ImageFont.truetype(fontpfad,schriftgröße)
     xy = schreib.textsize(name ,font = font)
 
-    while ((xy[0]<= 185) and (xy[1]<=50)):
+    while ((xy[0]<= 180) and (xy[1]<=50)):
         schriftgröße = 1 + schriftgröße
         font = ImageFont.truetype(fontpfad,schriftgröße)
         xy = schreib.textsize(name ,font = font)
@@ -182,8 +210,8 @@ def raumSuche(satz):
         print("Kein Raum gefunden !!")
     
     return raum
-
-def aktualisieren(pfad ="kalender/hskalender.ics"):
+# der Kalender wird geöffnet und ausgelesen.
+def aktualisieren(pfad = "kalender/hskalender.ics"):
     
     datei = ""
     try:
@@ -199,22 +227,28 @@ def aktualisieren(pfad ="kalender/hskalender.ics"):
             except:
                 kategorie = "NORMAL"
             finally:
+                
                 if (kategorie==("NORMAL" or "AKTUELL")):
                     beschreibung = component.get("description")
                     # name = namensSuche(beschreibung)
                     raum = raumSuche(beschreibung)
                     beginn = component.get("dtstart").dt
                     ende = component.get("dtend").dt
+                    
                     eintrag = Termin(beginn, ende, raum)
-                    heute = heuteBestimmen(eintrag.strtdatum) 
+                    heute = heuteBestimmen(eintrag.strtdatum)
+
                     if(eintrag.enddatum > heute):
                         termin.append(eintrag)
+                        
     termin = sorted(termin, key=lambda x: x.strtdatum)
            
     if  datei:
         datei.close()
 
     return termin
+
+
 
 if __name__ == '__main__':
     main()

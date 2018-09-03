@@ -1,6 +1,5 @@
 nachname=Zimmermann
 raumnummer=M303
-test=
 # bsp :
 # nachname=Müller
 # raumnummer=M307
